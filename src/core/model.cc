@@ -4,6 +4,10 @@
 
 #include "core/model.h"
 
-naivebayes::model::model() {
+namespace naivebayes{
+    naivebayes::model::model() {
 
-}
+    }
+} //
+
+

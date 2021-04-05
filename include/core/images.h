@@ -9,14 +9,12 @@
 #include <iostream>
 
 namespace naivebayes {
-
 class Images {
 public:
     Images(int digit, std::vector<char> image);
 private:
     int digit_;
     std::vector<char> image_;
-    size_t kSize = 28;
 };
 
 } //namespace naivebayes

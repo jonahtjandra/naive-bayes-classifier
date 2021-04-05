@@ -51,7 +51,8 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND CORE_SOURCE_FILES src/core/rename_this_file.cc
                               src/core/images.cc
-                              src/core/model.cc)
+                              src/core/model.cc
+                              src/core/train.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
