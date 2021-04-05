@@ -17,7 +17,7 @@ public:
     friend std::istream& operator>>(std::istream& is, Train& train);
     std::vector<naivebayes::Images> images_;
 private:
-    //const size_t kSize_ = 28;
+    static const size_t kSize_ = 28;
 
 };
 

@@ -16,7 +16,6 @@ int main() {
   std::ifstream input_file(file_path);
 
   if (input_file.is_open()) {
-      std::cout << "test";
       input_file >> train;
       input_file.close();
   }
