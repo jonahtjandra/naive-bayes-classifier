@@ -13,6 +13,7 @@ class Images {
 public:
     Images(int digit, std::vector<char> image);
     int GetDigit();
+    std::vector<char> GetImage();
 private:
     int digit_;
     std::vector<char> image_;

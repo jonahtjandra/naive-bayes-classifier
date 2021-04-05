@@ -6,8 +6,13 @@ naivebayes::Images::Images(int digit, std::vector<char> image) {
     image_ = image;
 }
 
-    int Images::GetDigit() {
-        return digit_;
-    }
+int Images::GetDigit() {
+    return digit_;
+}
+
+std::vector<char> Images::GetImage() {
+    return image_;
+}
+
 } // namespace naivebayes
 

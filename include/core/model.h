@@ -17,11 +17,10 @@ public:
 
 private:
     float CalculatePrior(int c);
-    float CalculateProbability(std::vector<naivebayes::Images> images);
+    float CalculateProbability(int c);
     float const laplace_smoothing_ = 1;
     //std::string save_path_ = "";
     //stored at index referring to the class of digit, so index 0 = class 0
-    std::vector<float> prior;
     static const size_t kSize = 28;
     //probabilites multidimensional array in the format: [i][j][2][10]
     float probabilities_[kSize][kSize][2][10];
