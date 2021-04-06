@@ -12,8 +12,8 @@ namespace naivebayes {
 class Images {
 public:
     Images(int digit, std::vector<char> image);
-    int GetDigit();
-    std::vector<char> GetImage();
+    int GetDigit() const;
+    std::vector<char> GetImage() const;
 private:
     int digit_;
     std::vector<char> image_;

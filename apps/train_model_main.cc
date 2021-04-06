@@ -3,6 +3,7 @@
 #include <core/rename_this_file.h>
 #include <fstream>
 #include <core/train.h>
+#include <core/model.h>
 
 // TODO: You may want to change main's signature to take in argc and argv
 int main() {
@@ -19,6 +20,11 @@ int main() {
       input_file >> train;
       input_file.close();
   }
+
+  naivebayes::model model;
+  model.Train(train.GetImages());
+
+  std::cout << model.
 
   std::cout << "Welcome to " << naivebayes::Placeholder().GetBestClass()
             << std::endl;

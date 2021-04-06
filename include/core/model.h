@@ -12,18 +12,22 @@ namespace naivebayes {
 class model {
 public:
     model();
-    void train(std::vector<naivebayes::Images> images);
-    void save();
+    void Train(const std::vector<naivebayes::Images>& images);
+    void Save();
+    void Load();
+    void CalculateProbabilty(const std::vector<naivebayes::Images>& images);
+    void CalculatePrior(const std::vector<naivebayes::Images>& images);
+    friend std::istream& operator>>(std::istream& is, model& model);
+    friend std::ostream& operator<<(std::ostream& os, model& model);
 
 private:
-    float CalculatePrior(int c);
-    float CalculateProbability(int c);
     float const laplace_smoothing_ = 1;
     //std::string save_path_ = "";
     //stored at index referring to the class of digit, so index 0 = class 0
     static const size_t kSize = 28;
     //probabilites multidimensional array in the format: [i][j][2][10]
     float probabilities_[kSize][kSize][2][10];
+    float prior_ [10];
 
 };
 

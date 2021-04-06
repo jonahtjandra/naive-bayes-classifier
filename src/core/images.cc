@@ -6,11 +6,11 @@ naivebayes::Images::Images(int digit, std::vector<char> image) {
     image_ = image;
 }
 
-int Images::GetDigit() {
+int Images::GetDigit() const {
     return digit_;
 }
 
-std::vector<char> Images::GetImage() {
+std::vector<char> Images::GetImage() const {
     return image_;
 }
 

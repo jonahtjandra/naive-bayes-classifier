@@ -39,7 +39,6 @@ std::istream &operator>>(std::istream &is, Train &train) {
         if (count == naivebayes::Train::kSize_ * naivebayes::Train::kSize_ + 1)  {
             //making sure images are n by n
             if (chars.size() == naivebayes::Train::kSize_ * naivebayes::Train::kSize_) {
-                std::cout << chars.size();
                 train.images_.emplace_back(actual, chars);
             }
             chars.clear();
