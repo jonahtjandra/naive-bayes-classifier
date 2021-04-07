@@ -10,7 +10,7 @@ namespace naivebayes{
 naivebayes::model::model() {}
 
 void model::Train(naivebayes::Train train) {
-    CalculateProbabilty(train.GetImages());
+    CalculateProbability(train.GetImages());
     CalculatePrior(train.GetImages());
 }
 
@@ -76,7 +76,7 @@ void model::CalculatePrior(const std::vector<naivebayes::Images>& images) {
     }
 }
 
-void model::CalculateProbabilty(const std::vector<naivebayes::Images>& images) {
+void model::CalculateProbability(const std::vector<naivebayes::Images>& images) {
     for (int i = 0; i < kSize; i++) {
         for (int j = 0; j < kSize; j++) {
             for (int k = 0; k < 2; k++) {
@@ -108,11 +108,11 @@ void model::CalculateProbabilty(const std::vector<naivebayes::Images>& images) {
     }
 }
 
-float model::GetPrior(int i) {
+float model::GetPrior(int i) const {
     return this->prior_[i];
 }
 
-float model::GetProbability(int i, int j, int k, int l) {
+float model::GetProbability(int i, int j, int k, int l) const {
     return this->probabilities_[i][j][k][l];
 }
 
