@@ -27,7 +27,8 @@ std::istream &operator>>(std::istream &is, Train &train) {
     for (char c : text) {
         //actual digit values are always in start of a 28 by 28 images so they are always in the 0 order of every 29 chars.
         if (count == 0) {
-            actual = c;
+            //ASCII code for single digits starts at 48
+            actual = c - 48;
             //make sure that count isn't staying at zero since we continue after this line
             count++;
             //make sure that the actual value, the 0 order doesn't get appended as a char in the image

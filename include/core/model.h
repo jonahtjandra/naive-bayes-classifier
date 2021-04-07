@@ -13,8 +13,6 @@ class model {
 public:
     model();
     void Train(const std::vector<naivebayes::Images>& images);
-    void Save();
-    void Load();
     void CalculateProbabilty(const std::vector<naivebayes::Images>& images);
     void CalculatePrior(const std::vector<naivebayes::Images>& images);
     friend std::istream& operator>>(std::istream& is, model& model);

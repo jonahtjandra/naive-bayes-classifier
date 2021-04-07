@@ -16,14 +16,6 @@ void model::Train(const std::vector<naivebayes::Images>& images) {
     CalculatePrior(images);
 }
 
-void model::Save() {
-
-}
-
-void model::Load() {
-
-}
-
 std::istream &operator>>(std::istream &is, model &model) {
     std::string line;
     std::string text;
@@ -110,8 +102,8 @@ void model::CalculateProbabilty(const std::vector<naivebayes::Images>& images) {
                             }
                         }
                     }
-                    probabilities_[i][j][k][l] = (laplace_smoothing_ + num_of_image)
-                                                 /(2*laplace_smoothing_ + total_num_of_image);
+                    probabilities_[i][j][k][l] = (laplace_smoothing_ + float(num_of_image))
+                                                 /(2*laplace_smoothing_ + float(total_num_of_image));
                 }
             }
         }
