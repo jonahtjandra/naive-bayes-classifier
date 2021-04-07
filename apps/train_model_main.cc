@@ -11,7 +11,7 @@ int main() {
   //images we should loop through the txt file in increments of 28*28 + 1 and instantiate an images object from it.
   naivebayes::Train train(28);
   std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/trainingimagesandlabels.txt";
-  std::string save_file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel";
+  std::string save_file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel.txt";
   std::ifstream input_file(file_path);
   std::ofstream output_file(save_file_path);
 

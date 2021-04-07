@@ -72,7 +72,7 @@ public:
 private:
     float const laplace_smoothing_ = 1;
     //size of the image
-    static const size_t kSize = 3;
+    const static size_t kSize = 28;
     //probabilites multidimensional array in the format: [i][j][2][10]
     float probabilities_[kSize][kSize][2][10];
     //there are 10 different digits
