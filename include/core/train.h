@@ -12,12 +12,11 @@
 namespace naivebayes {
 class Train {
 public:
-    Train();
+    Train(size_t size);
     std::vector<naivebayes::Images> GetImages() const;
     friend std::istream& operator>>(std::istream& is, Train& train);
     std::vector<naivebayes::Images> images_;
-private:
-    static const size_t kSize_ = 28;
+    size_t size_;
 
 };
 

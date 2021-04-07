@@ -7,17 +7,15 @@
 #include <utility>
 
 namespace naivebayes{
-naivebayes::model::model() {
+naivebayes::model::model() {}
 
-}
-
-void model::Train(const std::vector<naivebayes::Images>& images) {
-    CalculateProbabilty(images);
-    CalculatePrior(images);
+void model::Train(naivebayes::Train train) {
+    CalculateProbabilty(train.GetImages());
+    CalculatePrior(train.GetImages());
 }
 
 std::istream &operator>>(std::istream &is, model &model) {
-    std::string line;
+    std::string line = "";
     std::string text;
     std::vector<float> probabilities;
     int count = 0;
@@ -108,6 +106,14 @@ void model::CalculateProbabilty(const std::vector<naivebayes::Images>& images) {
             }
         }
     }
+}
+
+float model::GetPrior(int i) {
+    return this->prior_[i];
+}
+
+float model::GetProbability(int i, int j, int k, int l) {
+    return this->probabilities_[i][j][k][l];
 }
 
 

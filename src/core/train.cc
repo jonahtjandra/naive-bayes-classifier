@@ -8,7 +8,9 @@
 
 namespace naivebayes {
 
-naivebayes::Train::Train() {}
+naivebayes::Train::Train(size_t size) {
+    size_ = size;
+}
 
 std::vector<naivebayes::Images> naivebayes::Train::GetImages() const {
     return images_;
@@ -37,9 +39,9 @@ std::istream &operator>>(std::istream &is, Train &train) {
         chars.push_back(c);
         count++;
         //every time it reaches n by n create a new image and emplace into the image vector
-        if (count == naivebayes::Train::kSize_ * naivebayes::Train::kSize_ + 1)  {
+        if (count == train.size_ * train.size_ + 1)  {
             //making sure images are n by n
-            if (chars.size() == naivebayes::Train::kSize_ * naivebayes::Train::kSize_) {
+            if (chars.size() == train.size_ * train.size_) {
                 train.images_.emplace_back(actual, chars);
             }
             chars.clear();
