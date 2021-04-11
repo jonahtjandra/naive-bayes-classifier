@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 
+//make struct
 namespace naivebayes {
 class Images {
 public:
