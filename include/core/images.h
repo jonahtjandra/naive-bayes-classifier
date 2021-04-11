@@ -56,6 +56,8 @@ public:
      */
     friend std::istream& operator>>(std::istream& is, Images& train);
 
+    std::vector<std::vector<char>> To2dVec(std::vector<char> image);
+
     private:
         std::vector<Image> images_;
         size_t size_;

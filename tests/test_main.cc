@@ -17,7 +17,7 @@ TEST_CASE("Calculating Probabilities") {
     model.Train(train);
 
     SECTION("Feature Probability Check") {
-        REQUIRE(model.GetProbability(0,0,0,0) == Approx(2.0/3.0).epsilon(0.00001));
+        REQUIRE(model.GetProbability(0,0,0,0) == Approx(float(2.0/3.0)).epsilon(0.00001));
     }
 
     SECTION("Prior Probability Check") {
@@ -74,12 +74,24 @@ TEST_CASE("Saving model into a file and loading it back") {
             model_file.close();
         }
         SECTION("Feature Probability Check") {
-            REQUIRE(model_new.GetProbability(0,0,0,0) == Approx(2.0/3.0).epsilon(0.00001));
+            REQUIRE(model_new.GetProbability(0,0,0,0) == Approx(float(2.0/3.0)).epsilon(0.00001));
         }
         SECTION("Prior Probability Check") {
             REQUIRE(model.GetPrior(0) == Approx(float(2.0/15.0)).epsilon(0.00001));
         }
     }
 
+}
+TEST_CASE("Predicting digits") {
+    std::string model_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel.txt";
+    std::ifstream model_file(model_path);
+    naivebayes::model model;
+    if (model_file.is_open()) {
+        model_file >> model;
+        model_file.close();
+    }
+    SECTION("Test MakePrediction") {
+        model.MakePrediction()
+    }
 }
 

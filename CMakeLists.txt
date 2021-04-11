@@ -49,16 +49,15 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/rename_this_file.cc
-                              src/core/model.cc
-                              src/core/images.cc)
+list(APPEND CORE_SOURCE_FILES src/core/model.cc
+                              src/core/images.cc
+                              src/core/classifier.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
                             src/visualizer/sketchpad.cc)
 
-list(APPEND TEST_FILES tests/rename_this_test_file.cc
-                       tests/test_main.cc
+list(APPEND TEST_FILES tests/test_main.cc
                        tests/test_images.cc
                        tests/test_train.cc)
 

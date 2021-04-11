@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include <core/rename_this_file.h>
 #include <fstream>
 #include <core/images.h>
 #include <core/model.h>
@@ -27,7 +26,5 @@ int main() {
     output_file << model;
   }
 
-  std::cout << "Welcome to " << naivebayes::Placeholder().GetBestClass()
-            << std::endl;
   return 0;
 }
