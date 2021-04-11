@@ -1,9 +1,9 @@
 #include <catch2/catch.hpp>
-#include <core/train.h>
+#include <core/images.h>
 #include <fstream>
 
 TEST_CASE(">> operator overload") {
-    naivebayes::Train train(3);
+    naivebayes::Images train(3);
     std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
     std::ifstream input_file(file_path);
     if (input_file.is_open()) {
@@ -24,7 +24,7 @@ TEST_CASE(">> operator overload") {
 }
 
 TEST_CASE("Parsing different image sizes") {
-    naivebayes::Train train(5);
+    naivebayes::Images train(5);
     std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images_length_5";
     std::ifstream input_file(file_path);
     if (input_file.is_open()) {

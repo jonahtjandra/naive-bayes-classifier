@@ -9,7 +9,7 @@
 namespace naivebayes{
 naivebayes::model::model() {}
 
-void model::Train(naivebayes::Train train) {
+void model::Train(naivebayes::Images train) {
     CalculateProbability(train.GetImages());
     CalculatePrior(train.GetImages());
 }
@@ -62,11 +62,11 @@ std::ostream &operator<<(std::ostream &os, model &model) {
     return os;
 }
 
-void model::CalculatePrior(const std::vector<naivebayes::Images>& images) {
+void model::CalculatePrior(const std::vector<naivebayes::Images::Image>& images) {
     for (int i = 0; i < 10; i++) {
         int num_of_image = 0;
         int total_num_of_image = 0;
-        for (const Images& image : images) {
+        for (const Images::Image& image : images) {
             if (image.GetDigit() == i) {
                 num_of_image++;
             }
@@ -76,14 +76,14 @@ void model::CalculatePrior(const std::vector<naivebayes::Images>& images) {
     }
 }
 
-void model::CalculateProbability(const std::vector<naivebayes::Images>& images) {
+void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& images) {
     for (int i = 0; i < kSize; i++) {
         for (int j = 0; j < kSize; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 10; l++) {
                     int num_of_image = 0;
                     int total_num_of_image = 0;
-                    for (const Images& image : images) {
+                    for (const Images::Image& image : images) {
                         if (image.GetDigit() == l) {
                             total_num_of_image++;
                             //shaded

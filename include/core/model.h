@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 #include "images.h"
-#include "train.h"
+#include "images.h"
 
 namespace naivebayes {
 
@@ -18,22 +18,22 @@ public:
     model();
 
     /**
-     * Train method for training from a train object
+     * Images method for training from a train object
      * @param train the train object used in training
      */
-    void Train(naivebayes::Train train);
+    void Train(naivebayes::Images train);
 
     /**
      * Method used for calculating features probability
      * @param images the set of images used to calculate these probabilities from
      */
-    void CalculateProbability(const std::vector<naivebayes::Images>& images);
+    void CalculateProbability(const std::vector<naivebayes::Images::Image>& images);
 
     /**
      * Method used for calculating prior probabilities
      * @param images the set of images used to calculate these probabilities from
      */
-    void CalculatePrior(const std::vector<naivebayes::Images>& images);
+    void CalculatePrior(const std::vector<naivebayes::Images::Image>& images);
 
     /**
      * Method for overloading the >> operator used for loading in a model
