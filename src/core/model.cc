@@ -125,7 +125,6 @@ float model::GetProbability(int i, int j, int k, int l) const {
 }
 
 int model::MakePrediction(std::vector<std::vector<char>> image) const {
-    std::cout << "other one";
     int prediction = 0;
     //likelihoods for each digit class
     float likelihoods[10] = {0};
@@ -133,21 +132,20 @@ int model::MakePrediction(std::vector<std::vector<char>> image) const {
     int count = 0;
     //computing for likelihood score for each digit class
     for (int l = 0 ; l < 10; l++) {
-        likelihoods[l] += log10(prior_[l]);
+        likelihoods[l] += log(prior_[l]);
         for (int i = 0; i < kSize; i++) {
             for (int j = 0; j < kSize; j++) {
                 count++;
-                if (image[i][j] == '#') {
-                    likelihoods[l] += log10(features_prob[i][j][0][l]);
+                if (image[i][j] == '#' || image[i][j] == '+') {
+                    likelihoods[l] += log(features_prob[i][j][0][l]);
                 } else {
-                    likelihoods[l] += log10(features_prob[i][j][1][l]);
+                    likelihoods[l] += log(features_prob[i][j][1][l]);
                 }
             }
         }
     }
     //finding highest likelihood
     for (int i = 0; i < 10; i++) {
-        std::cout << likelihoods[2] << std::endl;
         if (likelihoods[i] > highest_likelihood) {
             highest_likelihood = likelihoods[i];
             prediction = i;

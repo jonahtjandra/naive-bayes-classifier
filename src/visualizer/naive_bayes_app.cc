@@ -20,11 +20,10 @@ namespace naivebayes {
                 test_file >> test_images_;
                 test_file.close();
             }
-            std::cout << test_images_.GetImages().size();
         }
 
         void NaiveBayesApp::draw() {
-            ci::Color8u background_color(255, 246, 148);  // light yellow
+            ci::Color8u background_color(130,130,130);  // light yellow
             ci::gl::clear(background_color);
 
             sketchpad_.Draw();
@@ -35,7 +34,7 @@ namespace naivebayes {
 
             ci::gl::drawStringCentered(
                     "Prediction: " + std::to_string(current_prediction_),
-                    glm::vec2(kWindowSize / 2, kWindowSize - kMargin / 2), ci::Color("blue"));
+                    glm::vec2(kWindowSize / 2, kWindowSize - kMargin / 2), ci::Color("black"));
         }
 
         void NaiveBayesApp::mouseDown(ci::app::MouseEvent event) {
