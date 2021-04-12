@@ -33,7 +33,7 @@ namespace naivebayes {
 
         private:
             naivebayes::Images test_images_ = naivebayes::Images(kImageDimension);
-            naivebayes::model model_;
+            naivebayes::model model_ = naivebayes::model(kImageDimension);
             Sketchpad sketchpad_;
             int current_prediction_ = -1;
         };

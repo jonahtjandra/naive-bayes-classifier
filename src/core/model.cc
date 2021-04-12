@@ -4,11 +4,27 @@
 
 #include "core/model.h"
 #include <math.h>
+#include <vector>
 
 #include <utility>
 
 namespace naivebayes{
-naivebayes::model::model() {}
+naivebayes::model::model(size_t size) {
+    size_ = size;
+    //initializing space for features_probabilities
+    features_prob.resize(size);
+    for (int i = 0; i < size; i++) {
+        features_prob[i].resize(size);
+        for (int j = 0; j < size; j++) {
+            features_prob[i][j].resize(2);
+            for (int k = 0; k < 2; k++ ) {
+                features_prob[i][j][k].resize(10);
+                for (int l = 0; l < 10; l++) {
+                }
+            }
+        }
+    }
+}
 
 void model::Train(naivebayes::Images train) {
     CalculateProbability(train.GetImages());
@@ -32,8 +48,8 @@ std::istream &operator>>(std::istream &is, model &model) {
     }
 
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
-    for (int i = 0; i < naivebayes::model::kSize; i++) {
-        for (int j = 0; j < naivebayes::model::kSize; j++) {
+    for (int i = 0; i < model.size_; i++) {
+        for (int j = 0; j < model.size_; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 10; l++) {
                     //the first 10 lines are dedicated to prior probabilities instead of features
@@ -55,8 +71,8 @@ std::ostream &operator<<(std::ostream &os, model &model) {
     }
 
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
-    for (int i = 0; i < naivebayes::model::kSize; i++) {
-        for (int j = 0; j < naivebayes::model::kSize; j++) {
+    for (int i = 0; i < model.size_; i++) {
+        for (int j = 0; j < model.size_; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 10; l++) {
                     os << model.features_prob[i][j][k][l];
@@ -85,8 +101,8 @@ void model::CalculatePrior(const std::vector<naivebayes::Images::Image>& images)
 
 void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& images) {
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
-    for (int i = 0; i < kSize; i++) {
-        for (int j = 0; j < kSize; j++) {
+    for (int i = 0; i < size_; i++) {
+        for (int j = 0; j < size_; j++) {
             for (int k = 0; k < 2; k++) {
                 for (int l = 0; l < 10; l++) {
                     int num_of_image = 0;
@@ -96,13 +112,13 @@ void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& i
                             total_num_of_image++;
                             //shaded
                             if (k == 0) {
-                                if (image.GetImage().at(i * kSize + j) == '#' ||
-                                    image.GetImage().at(i * kSize + j) == '+') {
+                                if (image.GetImage().at(i * size_ + j) == '#' ||
+                                    image.GetImage().at(i * size_ + j) == '+') {
                                     num_of_image++;
                                 }
                             } else {
                                 //unshaded
-                                if (image.GetImage().at(i * kSize + j) == ' ') {
+                                if (image.GetImage().at(i * size_ + j) == ' ') {
                                     num_of_image++;
                                 }
                             }
@@ -133,8 +149,8 @@ int model::MakePrediction(std::vector<std::vector<char>> image) const {
     //computing for likelihood score for each digit class
     for (int l = 0 ; l < 10; l++) {
         likelihoods[l] += log(prior_[l]);
-        for (int i = 0; i < kSize; i++) {
-            for (int j = 0; j < kSize; j++) {
+        for (int i = 0; i < size_; i++) {
+            for (int j = 0; j < size_; j++) {
                 count++;
                 if (image[i][j] == '#' || image[i][j] == '+') {
                     likelihoods[l] += log(features_prob[i][j][0][l]);
@@ -163,6 +179,7 @@ int model::MakePrediction(std::vector<std::vector<char>> image) const {
                 correct_predictions += 1;
             }
         }
+        //ratio of right prediction in the validation dataset
         return float(correct_predictions)/float(count);
     }
 

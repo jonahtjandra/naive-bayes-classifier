@@ -3,7 +3,50 @@
 #include <core/images.h>
 #include <core/model.h>
 
+TEST_CASE(">> operator overload") {
+    naivebayes::Images train(3);
+    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
+    std::ifstream input_file(file_path);
+    if (input_file.is_open()) {
+        input_file >> train;
+        input_file.close();
+    }
+    SECTION("Make sure that it correctly parses the digits") {
+        REQUIRE(train.GetImages().at(1).GetDigit() == 0);
+    }
+
+    SECTION("Make sure that it correctly parses the images") {
+        REQUIRE(train.GetImages().at(1).GetImage().size() == 9);
+    }
+
+    SECTION("Make sure that it parses all the images") {
+        REQUIRE(train.GetImages().size() == 5);
+    }
+}
+
+TEST_CASE("Parsing different image sizes") {
+    naivebayes::Images train(5);
+    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images_length_5";
+    std::ifstream input_file(file_path);
+    if (input_file.is_open()) {
+        input_file >> train;
+        input_file.close();
+    }
+    SECTION("Make sure that it correctly parses the digits") {
+        REQUIRE(train.GetImages().at(1).GetDigit() == 3);
+    }
+
+    SECTION("Make sure that it correctly parses the images") {
+        REQUIRE(train.GetImages().at(1).GetImage().size() == 25);
+    }
+
+    SECTION("Make sure that it parses all the images") {
+        REQUIRE(train.GetImages().size() == 2);
+    }
+}
+
 TEST_CASE("Calculating Probabilities") {
+    //load images
     naivebayes::Images train(3);
     std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
     std::ifstream input_file(file_path);
@@ -13,7 +56,7 @@ TEST_CASE("Calculating Probabilities") {
         input_file.close();
     }
 
-    naivebayes::model model;
+    naivebayes::model model(3);
     model.Train(train);
 
     SECTION("Feature Probability Check") {
@@ -38,7 +81,7 @@ TEST_CASE("Saving model into a file") {
         input_file.close();
     }
 
-    naivebayes::model model;
+    naivebayes::model model(3);
     model.Train(train);
 
     if (output_file.is_open()) {
@@ -60,7 +103,7 @@ TEST_CASE("Saving model into a file and loading it back") {
         input_file.close();
     }
 
-    naivebayes::model model;
+    naivebayes::model model(3);
     model.Train(train);
 
     if (output_file.is_open()) {
@@ -68,7 +111,7 @@ TEST_CASE("Saving model into a file and loading it back") {
     }
 
     SECTION("Load model") {
-        naivebayes::model model_new;
+        naivebayes::model model_new(3);
         if (model_file.is_open()) {
             model_file >> model_new;
             model_file.close();
@@ -82,16 +125,31 @@ TEST_CASE("Saving model into a file and loading it back") {
     }
 
 }
-TEST_CASE("Predicting digits") {
+TEST_CASE("Test model accuracy") {
+    //loading model
     std::string model_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel.txt";
     std::ifstream model_file(model_path);
-    naivebayes::model model;
+    naivebayes::model model(28);
     if (model_file.is_open()) {
         model_file >> model;
         model_file.close();
     }
-    SECTION("Test MakePrediction") {
-        model.MakePrediction()
+    //loading validation data set
+    naivebayes::Images test_images = naivebayes::Images(28);
+    std::string test_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/testimagesandlabels.txt";
+    std::ifstream test_file(test_path);
+    if (test_file.is_open()) {
+        test_file >> test_images;
+        test_file.close();
     }
+
+    SECTION("Test Calculate Accuracy") {
+        REQUIRE(model.CalculateAccuracy(test_images) > 0.7);
+    }
+
+}
+
+TEST_CASE() {
+
 }
 

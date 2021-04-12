@@ -50,7 +50,7 @@ namespace naivebayes {
             for (size_t row = 0; row < num_pixels_per_side_; ++row) {
                 for (size_t col = 0; col < num_pixels_per_side_; ++col) {
                     vec2 pixel_center = {col + 0.5, row + 0.5};
-
+                    //set pixel at row col to '#' for shading
                     if (glm::distance(brush_sketchpad_coords, pixel_center) <=
                         brush_radius_) {
                         pixel_shade_[row][col] = '#';
@@ -60,6 +60,7 @@ namespace naivebayes {
         }
 
         void Sketchpad::Clear() {
+            //reset all pixel shade to ' '
             pixel_shade_.resize(num_pixels_per_side_);
             for (size_t row = 0; row < num_pixels_per_side_; ++row) {
                 pixel_shade_[row].resize(num_pixels_per_side_);

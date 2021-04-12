@@ -50,6 +50,10 @@ namespace naivebayes {
              */
             void Clear();
 
+            /**
+             * Getter for pixel shading
+             * @return a 2d vector representing the pixel shading
+             */
             std::vector<std::vector<char>> GetPixels() const;
 
         private:

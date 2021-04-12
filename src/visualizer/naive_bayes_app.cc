@@ -8,12 +8,14 @@ namespace naivebayes {
                 : sketchpad_(glm::vec2(kMargin, kMargin), kImageDimension,
                              kWindowSize - 2 * kMargin) {
             ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
+            //loading the model
             std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel.txt";
             std::ifstream input_file(file_path);
             if (input_file.is_open()) {
                 input_file >> model_;
                 input_file.close();
             }
+            //loading validation data set
             std::string test_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/testimagesandlabels.txt";
             std::ifstream test_file(test_path);
             if (test_file.is_open()) {
@@ -46,6 +48,7 @@ namespace naivebayes {
         }
 
         void NaiveBayesApp::keyDown(ci::app::KeyEvent event) {
+            //calculating model's accuracy
             if (event.getChar() == 'i') {
                 std::cout << model_.CalculateAccuracy(test_images_);
             }

@@ -56,6 +56,11 @@ public:
      */
     friend std::istream& operator>>(std::istream& is, Images& train);
 
+    /**
+     * method for converting a vector of char into a 2d vector mapping of an image
+     * @param image
+     * @return a 2d vector of an image
+     */
     std::vector<std::vector<char>> To2dVec(std::vector<char> image);
 
     private:
