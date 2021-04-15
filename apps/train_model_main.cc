@@ -19,7 +19,7 @@ int main() {
       input_file.close();
   }
 
-  naivebayes::model model;
+  naivebayes::model model(28);
   model.Train(train);
 
   if (output_file.is_open()) {

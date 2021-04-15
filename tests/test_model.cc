@@ -5,7 +5,7 @@
 
 TEST_CASE(">> operator overload") {
     naivebayes::Images train(3);
-    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
+    std::string file_path = "tests/test_train_images.txt";
     std::ifstream input_file(file_path);
     if (input_file.is_open()) {
         input_file >> train;
@@ -26,7 +26,7 @@ TEST_CASE(">> operator overload") {
 
 TEST_CASE("Parsing different image sizes") {
     naivebayes::Images train(5);
-    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images_length_5";
+    std::string file_path = "tests/test_train_images_length_5";
     std::ifstream input_file(file_path);
     if (input_file.is_open()) {
         input_file >> train;
@@ -48,7 +48,7 @@ TEST_CASE("Parsing different image sizes") {
 TEST_CASE("Calculating Probabilities") {
     //load images
     naivebayes::Images train(3);
-    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
+    std::string file_path = "tests/test_train_images.txt";
     std::ifstream input_file(file_path);
 
     if (input_file.is_open()) {
@@ -60,19 +60,25 @@ TEST_CASE("Calculating Probabilities") {
     model.Train(train);
 
     SECTION("Feature Probability Check") {
-        REQUIRE(model.GetProbability(0,0,0,0) == Approx(float(2.0/3.0)).epsilon(0.00001));
+        REQUIRE(model.GetFeatures(0, 0, 0, 0) == Approx(float(2.0 / 3.0)).epsilon(0.00001));
+        REQUIRE(model.GetFeatures(1, 1, 1, 1) == Approx(float(1.0 / 4.0)).epsilon(0.00001));
+        REQUIRE(model.GetFeatures(1, 2, 1, 0) == Approx(float(1.0 / 3.0)).epsilon(0.00001));
+        REQUIRE(model.GetFeatures(2, 2, 0, 3) == Approx(float(2.0 / 3.0)).epsilon(0.00001));
     }
 
     SECTION("Prior Probability Check") {
         REQUIRE(model.GetPrior(0) == Approx(float(2.0/15.0)).epsilon(0.00001));
+        REQUIRE(model.GetPrior(1) == Approx(float(3.0/15.0)).epsilon(0.00001));
+        REQUIRE(model.GetPrior(2) == Approx(float(1.0/15.0)).epsilon(0.00001));
+        REQUIRE(model.GetPrior(3) == Approx(float(2.0/15.0)).epsilon(0.00001));
     }
 
 }
 
 TEST_CASE("Saving model into a file") {
     naivebayes::Images train(3);
-    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
-    std::string out_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_output_model.txt";
+    std::string file_path = "tests/test_train_images.txt";
+    std::string out_path = "tests/test_output_model.txt";
     std::ifstream input_file(file_path);
     std::ofstream output_file(out_path);
 
@@ -91,9 +97,9 @@ TEST_CASE("Saving model into a file") {
 
 TEST_CASE("Saving model into a file and loading it back") {
     naivebayes::Images train(3);
-    std::string file_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_train_images.txt";
-    std::string out_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_output_model.txt";
-    std::string model_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/tests/test_load_model.txt";
+    std::string file_path = "tests/test_train_images.txt";
+    std::string out_path = "tests/test_output_model.txt";
+    std::string model_path = "tests/test_load_model.txt";
     std::ifstream input_file(file_path);
     std::ofstream output_file(out_path);
     std::ifstream model_file(model_path);
@@ -117,7 +123,7 @@ TEST_CASE("Saving model into a file and loading it back") {
             model_file.close();
         }
         SECTION("Feature Probability Check") {
-            REQUIRE(model_new.GetProbability(0,0,0,0) == Approx(float(2.0/3.0)).epsilon(0.00001));
+            REQUIRE(model_new.GetFeatures(0, 0, 0, 0) == Approx(float(2.0 / 3.0)).epsilon(0.00001));
         }
         SECTION("Prior Probability Check") {
             REQUIRE(model.GetPrior(0) == Approx(float(2.0/15.0)).epsilon(0.00001));
@@ -125,9 +131,10 @@ TEST_CASE("Saving model into a file and loading it back") {
     }
 
 }
+
 TEST_CASE("Test model accuracy") {
     //loading model
-    std::string model_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/savedmodel.txt";
+    std::string model_path = "data/savedmodel.txt";
     std::ifstream model_file(model_path);
     naivebayes::model model(28);
     if (model_file.is_open()) {
@@ -136,7 +143,7 @@ TEST_CASE("Test model accuracy") {
     }
     //loading validation data set
     naivebayes::Images test_images = naivebayes::Images(28);
-    std::string test_path = "/Users/jonah/Desktop/SP2021/Cinder/my-projects/naive-bayes-jonahtjandra/data/testimagesandlabels.txt";
+    std::string test_path = "data/trainingimagesandlabels.txt";
     std::ifstream test_file(test_path);
     if (test_file.is_open()) {
         test_file >> test_images;
@@ -146,10 +153,25 @@ TEST_CASE("Test model accuracy") {
     SECTION("Test Calculate Accuracy") {
         REQUIRE(model.CalculateAccuracy(test_images) > 0.7);
     }
-
 }
 
-TEST_CASE() {
+TEST_CASE("Test model likelihood using smaller dataset") {
+    //load images
+    naivebayes::Images train(3);
+    std::string file_path = "tests/test_train_images.txt";
+    std::ifstream input_file(file_path);
 
+    if (input_file.is_open()) {
+        input_file >> train;
+        input_file.close();
+    }
+    naivebayes::model model(3);
+    model.Train(train);
+    std::vector<std::vector<char>> test_image = {{'#','#','#'},{'#',' ','#'},{'#','#','#'}};
+
+    SECTION("Test likelihood") {
+        REQUIRE(model.GetHighestLikelihood(test_image) == Approx(-5.6641).epsilon(0.00001));
+    }
 }
+
 

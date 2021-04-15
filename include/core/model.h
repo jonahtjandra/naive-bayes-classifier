@@ -26,13 +26,13 @@ namespace naivebayes {
          * Method used for calculating features probability
          * @param images the set of images used to calculate these probabilities from
          */
-        void CalculateProbability(const std::vector<naivebayes::Images::Image> &images);
+        void CalculateFeaturesProbability(const std::vector<naivebayes::Images::Image> &images);
 
         /**
          * Method used for calculating prior probabilities
          * @param images the set of images used to calculate these probabilities from
          */
-        void CalculatePrior(const std::vector<naivebayes::Images::Image> &images);
+        void CalculatePriorProbability(const std::vector<naivebayes::Images::Image> &images);
 
         /**
          * Method for overloading the >> operator used for loading in a model
@@ -61,18 +61,25 @@ namespace naivebayes {
          * Getter for feature probabilities
          * @param i the i index of the 2d image
          * @param j the j index of the 2d image
-         * @param k shaded or unshaded
-         * @param l the class of image
+         * @param shade shaded or unshaded
+         * @param label the class of image
          * @return the feature probability
          */
-        float GetProbability(int i, int j, int k, int l) const;
+        float GetFeatures(int i, int j, int shade, int label) const;
 
         /**
          * Method for making a prediction given an image
          * @param image a 2d vector representation of an image
          * @return the digit of the image
          */
-        int MakePrediction(std::vector<std::vector<char>> image) const;
+        int Predict(std::vector<std::vector<char>> image) const;
+
+        /**
+        * Method for getting highest likelihood
+        * @param image a 2d vector representation of an image
+        * @return the highest likelihood of the image
+        */
+        float GetHighestLikelihood(std::vector<std::vector<char>> image) const;
 
         /**
          * Method for calculating accuracy of the model
@@ -81,16 +88,16 @@ namespace naivebayes {
          */
         double CalculateAccuracy(naivebayes::Images validation_data) const;
 
-
     private:
+        //[class][shaded or unshaded][mean or variance]
         float const laplace_smoothing_ = 1;
         //size of the image
         size_t size_;
         //probabilites multidimensional array in the format: [i][j][shaded or unshaded][label]
         //i,j is position in the 2d array; k is the shaded or unshaded where 0 = shaded and 1 = unshaded; l is the label
-        std::vector<std::vector<std::vector<std::vector<float>>>> features_prob;
+        std::vector<std::vector<std::vector<std::vector<float>>>> features_probability_;
         //there are 10 different digits
-        float prior_[10];
+        float prior_probability_[10];
     };
 
 } // namespace naivebayes

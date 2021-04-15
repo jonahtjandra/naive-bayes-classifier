@@ -54,7 +54,7 @@ namespace naivebayes {
             }
             switch (event.getCode()) {
                 case ci::app::KeyEvent::KEY_RETURN:
-                    current_prediction_ = model_.MakePrediction(sketchpad_.GetPixels());
+                    current_prediction_ = model_.Predict(sketchpad_.GetPixels());
                     break;
 
                 case ci::app::KeyEvent::KEY_BACKSPACE:

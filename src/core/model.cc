@@ -12,13 +12,13 @@ namespace naivebayes{
 naivebayes::model::model(size_t size) {
     size_ = size;
     //initializing space for features_probabilities
-    features_prob.resize(size);
+    features_probability_.resize(size);
     for (int i = 0; i < size; i++) {
-        features_prob[i].resize(size);
+        features_probability_[i].resize(size);
         for (int j = 0; j < size; j++) {
-            features_prob[i][j].resize(2);
+            features_probability_[i][j].resize(2);
             for (int k = 0; k < 2; k++ ) {
-                features_prob[i][j][k].resize(10);
+                features_probability_[i][j][k].resize(10);
                 for (int l = 0; l < 10; l++) {
                 }
             }
@@ -27,8 +27,8 @@ naivebayes::model::model(size_t size) {
 }
 
 void model::Train(naivebayes::Images train) {
-    CalculateProbability(train.GetImages());
-    CalculatePrior(train.GetImages());
+    CalculateFeaturesProbability(train.GetImages());
+    CalculatePriorProbability(train.GetImages());
 }
 
 //loading in model
@@ -44,16 +44,16 @@ std::istream &operator>>(std::istream &is, model &model) {
     }
 
     for (int i = 0; i < 10; i++) {
-        model.prior_[i] = probabilities.at(i);
+        model.prior_probability_[i] = probabilities.at(i);
     }
 
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
     for (int i = 0; i < model.size_; i++) {
         for (int j = 0; j < model.size_; j++) {
-            for (int k = 0; k < 2; k++) {
-                for (int l = 0; l < 10; l++) {
+            for (int shade = 0; shade < 2; shade++) {
+                for (int label = 0; label < 10; label++) {
                     //the first 10 lines are dedicated to prior probabilities instead of features
-                    model.features_prob[i][j][k][l] = probabilities.at(10 + count);
+                    model.features_probability_[i][j][shade][label] = probabilities.at(10 + count);
                     count++;
                 }
             }
@@ -66,16 +66,16 @@ std::istream &operator>>(std::istream &is, model &model) {
 std::ostream &operator<<(std::ostream &os, model &model) {
     std::string separator = "\n";
     for (int i = 0; i < 10; i++) {
-        os << model.prior_[i];
+        os << model.prior_probability_[i];
         os << separator;
     }
 
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
     for (int i = 0; i < model.size_; i++) {
         for (int j = 0; j < model.size_; j++) {
-            for (int k = 0; k < 2; k++) {
-                for (int l = 0; l < 10; l++) {
-                    os << model.features_prob[i][j][k][l];
+            for (int shade = 0; shade < 2; shade++) {
+                for (int label = 0; label < 10; label++) {
+                    os << model.features_probability_[i][j][shade][label];
                     os << separator;
                 }
             }
@@ -84,34 +84,34 @@ std::ostream &operator<<(std::ostream &os, model &model) {
     return os;
 }
 
-void model::CalculatePrior(const std::vector<naivebayes::Images::Image>& images) {
+void model::CalculatePriorProbability(const std::vector<naivebayes::Images::Image>& images) {
     //10 is the number of digit classes
-    for (int i = 0; i < 10; i++) {
+    for (int label = 0; label < 10; label++) {
         int num_of_image = 0;
         int total_num_of_image = 0;
         for (const Images::Image& image : images) {
-            if (image.GetDigit() == i) {
+            if (image.GetDigit() == label) {
                 num_of_image++;
             }
             total_num_of_image++;
         }
-        prior_[i] = (laplace_smoothing_+num_of_image)/(10*laplace_smoothing_+total_num_of_image);
+        prior_probability_[label] = (laplace_smoothing_ + num_of_image) / (10 * laplace_smoothing_ + total_num_of_image);
     }
 }
 
-void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& images) {
+void model::CalculateFeaturesProbability(const std::vector<naivebayes::Images::Image>& images) {
     //probabilites multidimensional array in the format: [i][j][shaded or unshaded][digit classes]
     for (int i = 0; i < size_; i++) {
         for (int j = 0; j < size_; j++) {
-            for (int k = 0; k < 2; k++) {
-                for (int l = 0; l < 10; l++) {
+            for (int shade = 0; shade < 2; shade++) {
+                for (int label = 0; label < 10; label++) {
                     int num_of_image = 0;
                     int total_num_of_image = 0;
                     for (const Images::Image& image : images) {
-                        if (image.GetDigit() == l) {
+                        if (image.GetDigit() == label) {
                             total_num_of_image++;
                             //shaded
-                            if (k == 0) {
+                            if (shade == 0) {
                                 if (image.GetImage().at(i * size_ + j) == '#' ||
                                     image.GetImage().at(i * size_ + j) == '+') {
                                     num_of_image++;
@@ -124,8 +124,8 @@ void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& i
                             }
                         }
                     }
-                    features_prob[i][j][k][l] = (laplace_smoothing_ + float(num_of_image))
-                                                / (2*laplace_smoothing_ + float(total_num_of_image));
+                    features_probability_[i][j][shade][label] = (laplace_smoothing_ + float(num_of_image))
+                                                                / (2*laplace_smoothing_ + float(total_num_of_image));
                 }
             }
         }
@@ -133,38 +133,40 @@ void model::CalculateProbability(const std::vector<naivebayes::Images::Image>& i
 }
 
 float model::GetPrior(int i) const {
-    return this->prior_[i];
+    return this->prior_probability_[i];
 }
 
-float model::GetProbability(int i, int j, int k, int l) const {
-    return this->features_prob[i][j][k][l];
+float model::GetFeatures(int i, int j, int shade, int label) const {
+    return this->features_probability_[i][j][shade][label];
 }
 
-int model::MakePrediction(std::vector<std::vector<char>> image) const {
+int model::Predict(std::vector<std::vector<char>> image) const {
     int prediction = 0;
     //likelihoods for each digit class
     float likelihoods[10] = {0};
     float highest_likelihood = INT32_MIN;
     int count = 0;
     //computing for likelihood score for each digit class
-    for (int l = 0 ; l < 10; l++) {
-        likelihoods[l] += log(prior_[l]);
+    for (int label = 0 ; label < 10; label++) {
+        likelihoods[label] += log(prior_probability_[label]);
         for (int i = 0; i < size_; i++) {
             for (int j = 0; j < size_; j++) {
                 count++;
                 if (image[i][j] == '#' || image[i][j] == '+') {
-                    likelihoods[l] += log(features_prob[i][j][0][l]);
+                    //0 = shaded
+                    likelihoods[label] += log(features_probability_[i][j][0][label]);
                 } else {
-                    likelihoods[l] += log(features_prob[i][j][1][l]);
+                    //1 = unshaded
+                    likelihoods[label] += log(features_probability_[i][j][1][label]);
                 }
             }
         }
     }
     //finding highest likelihood
-    for (int i = 0; i < 10; i++) {
-        if (likelihoods[i] > highest_likelihood) {
-            highest_likelihood = likelihoods[i];
-            prediction = i;
+    for (int label = 0; label < 10; label++) {
+        if (likelihoods[label] > highest_likelihood) {
+            highest_likelihood = likelihoods[label];
+            prediction = label;
         }
     }
     return prediction;
@@ -175,12 +177,42 @@ int model::MakePrediction(std::vector<std::vector<char>> image) const {
         int count = 0;
         for (const Images::Image& image : validation_data.GetImages()) {
             count++;
-            if (MakePrediction(validation_data.To2dVec(image.GetImage())) == image.GetDigit()) {
+            if (Predict(validation_data.To2dVec(image.GetImage())) == image.GetDigit()) {
                 correct_predictions += 1;
             }
         }
         //ratio of right prediction in the validation dataset
         return float(correct_predictions)/float(count);
+    }
+
+    float model::GetHighestLikelihood(std::vector<std::vector<char>> image) const {
+        //likelihoods for each digit class
+        float likelihoods[10] = {0};
+        float highest_likelihood = INT32_MIN;
+        int count = 0;
+        //computing for likelihood score for each digit class
+        for (int label = 0 ; label < 10; label++) {
+            likelihoods[label] += log(prior_probability_[label]);
+            for (int i = 0; i < size_; i++) {
+                for (int j = 0; j < size_; j++) {
+                    count++;
+                    if (image[i][j] == '#' || image[i][j] == '+') {
+                        //0 = shaded
+                        likelihoods[label] += log(features_probability_[i][j][0][label]);
+                    } else {
+                        //1 = unshaded
+                        likelihoods[label] += log(features_probability_[i][j][1][label]);
+                    }
+                }
+            }
+        }
+        //finding highest likelihood
+        for (int label = 0; label < 10; label++) {
+            if (likelihoods[label] > highest_likelihood) {
+                highest_likelihood = likelihoods[label];
+            }
+        }
+        return highest_likelihood;
     }
 
 
