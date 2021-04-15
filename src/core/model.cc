@@ -43,6 +43,7 @@ std::istream &operator>>(std::istream &is, model &model) {
         probabilities.push_back(std::stof(line));
     }
 
+    //10 digits
     for (int i = 0; i < 10; i++) {
         model.prior_probability_[i] = probabilities.at(i);
     }
@@ -109,18 +110,14 @@ void model::CalculateFeaturesProbability(const std::vector<naivebayes::Images::I
                     int total_num_of_image = 0;
                     for (const Images::Image& image : images) {
                         if (image.GetDigit() == label) {
+                            //total count for a particular class
                             total_num_of_image++;
-                            //shaded
-                            if (shade == 0) {
-                                if (image.GetImage().at(i * size_ + j) == '#' ||
-                                    image.GetImage().at(i * size_ + j) == '+') {
-                                    num_of_image++;
-                                }
-                            } else {
-                                //unshaded
-                                if (image.GetImage().at(i * size_ + j) == ' ') {
-                                    num_of_image++;
-                                }
+                            //shaded and unshaded count for that particular class
+                            if (shade == 0 && (image.GetImage().at(i * size_ + j) == '#' ||
+                                image.GetImage().at(i * size_ + j) == '+')) {
+                                num_of_image++;
+                            } else if (shade == 1 && image.GetImage().at(i * size_ + j) == ' ') {
+                                num_of_image++;
                             }
                         }
                     }
