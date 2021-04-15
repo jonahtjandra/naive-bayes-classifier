@@ -179,7 +179,7 @@ int model::Predict(std::vector<std::vector<char>> image) const {
             }
         }
         //ratio of right prediction in the validation dataset
-        return float(correct_predictions)/float(count);
+        return float(correct_predictions)/float(count) * 100.0;
     }
 
     float model::GetHighestLikelihood(std::vector<std::vector<char>> image) const {

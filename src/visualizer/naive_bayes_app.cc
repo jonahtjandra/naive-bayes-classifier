@@ -50,7 +50,7 @@ namespace naivebayes {
         void NaiveBayesApp::keyDown(ci::app::KeyEvent event) {
             //calculating model's accuracy
             if (event.getChar() == 'i') {
-                std::cout << model_.CalculateAccuracy(test_images_);
+                std::cout << model_.CalculateAccuracy(test_images_) << "%";
             }
             switch (event.getCode()) {
                 case ci::app::KeyEvent::KEY_RETURN:
